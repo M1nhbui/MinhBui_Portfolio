@@ -1,0 +1,23 @@
+{
+  "updatedAt": "2026-07-07T00:00:00.000Z",
+  "username": "M1nhbui",
+  "ranking": 209723,
+  "contest": {
+    "rating": 1551,
+    "attended": 3,
+    "globalRanking": 277929,
+    "totalParticipants": 874830,
+    "topPercentage": 32.17
+  },
+  "solved": {
+    "easy": { "done": 188, "total": 953 },
+    "medium": { "done": 255, "total": 2081 },
+    "hard": { "done": 43, "total": 951 }
+  },
+  "pastYear": {
+    "submissions": 260,
+    "activeDays": 60,
+    "maxStreak": 6
+  },
+  "calendar": null
+}

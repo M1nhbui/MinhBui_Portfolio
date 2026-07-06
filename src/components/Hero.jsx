@@ -1,128 +1,175 @@
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
-import HeroCanvas from './HeroCanvas'
 import Magnetic from './Magnetic'
 import { SITE } from '../data/content'
-import { EASE } from '../lib/motion'
+import { EASE, useIsCoarsePointer } from '../lib/motion'
 
-function TypedName({ text, start }) {
+/* Letter-by-letter name reveal; the last word gets the gradient. */
+function AnimatedName() {
   const reduced = useReducedMotion()
-  const [n, setN] = useState(reduced ? text.length : 0)
-  useEffect(() => {
-    if (reduced || !start) return
-    let i = 0
-    const t = setInterval(() => {
-      i++
-      setN(i)
-      if (i >= text.length) clearInterval(t)
-    }, 55)
-    return () => clearInterval(t)
-  }, [start, reduced, text])
+  const words = SITE.name.split(' ')
+  const lastWord = words.pop()
+
+  if (reduced) {
+    return (
+      <h1 className="font-display text-display font-bold text-bright">
+        {words.join(' ')} <span className="text-gradient">{lastWord}</span>
+      </h1>
+    )
+  }
+
+  let i = 0
+  const letter = {
+    hidden: { opacity: 0, y: '0.55em', rotate: 5 },
+    show: (idx) => ({
+      opacity: 1,
+      y: 0,
+      rotate: 0,
+      transition: { delay: 0.15 + idx * 0.045, duration: 0.65, ease: EASE },
+    }),
+  }
+  const renderWord = (word, gradient) =>
+    word.split('').map((ch) => (
+      <motion.span
+        key={i}
+        custom={i++}
+        variants={letter}
+        initial="hidden"
+        animate="show"
+        className={`inline-block ${gradient ? 'text-gradient' : ''}`}
+      >
+        {ch}
+      </motion.span>
+    ))
+
   return (
-    <>
-      {text.slice(0, n)}
-      <span className="text-accent cursor-blink" aria-hidden="true">▮</span>
-    </>
+    <h1 className="font-display text-display font-bold text-bright" aria-label={SITE.name}>
+      <span aria-hidden="true">
+        {words.map((w, wi) => (
+          <span key={wi} className="inline-block mr-[0.28em]">{renderWord(w, false)}</span>
+        ))}
+        <span className="inline-block">{renderWord(lastWord, true)}</span>
+      </span>
+    </h1>
   )
 }
 
-/* Terminal-framed portrait. Renders nothing if /public/portrait.jpg is missing. */
-function Portrait({ booted }) {
+/* Slow-floating gradient blobs behind the hero content. */
+function Blobs() {
+  const reduced = useReducedMotion()
+  if (reduced) return null
+  const blobs = [
+    { cls: 'w-72 h-72 top-[12%] left-[5%] from-accent/25 to-transparent', dur: 13, dx: 22, dy: -26 },
+    { cls: 'w-96 h-96 top-[45%] right-[2%] from-violet/25 to-transparent', dur: 17, dx: -28, dy: 20 },
+    { cls: 'w-64 h-64 bottom-[8%] left-[35%] from-cyan-300/30 to-transparent', dur: 15, dx: 18, dy: 24 },
+  ]
+  return (
+    <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
+      {blobs.map((b, i) => (
+        <motion.div
+          key={i}
+          className={`absolute rounded-full blur-3xl bg-gradient-to-br ${b.cls}`}
+          animate={{ x: [0, b.dx, 0], y: [0, b.dy, 0], scale: [1, 1.12, 1] }}
+          transition={{ duration: b.dur, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ))}
+    </div>
+  )
+}
+
+/* Glass portrait: pointer tilt + gentle idle float. Hidden if image missing. */
+function Portrait() {
   const [ok, setOk] = useState(true)
+  const reduced = useReducedMotion()
+  const coarse = useIsCoarsePointer()
+  const ref = useRef(null)
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 })
+
   if (!ok) return null
+
+  const onMove = (e) => {
+    if (reduced || coarse || !ref.current) return
+    const r = ref.current.getBoundingClientRect()
+    setTilt({
+      rx: -((e.clientY - r.top) / r.height - 0.5) * 10,
+      ry: ((e.clientX - r.left) / r.width - 0.5) * 10,
+    })
+  }
+
   return (
     <motion.figure
-      initial={{ opacity: 0, y: 24 }}
-      animate={booted ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: 0.7, duration: 0.8, ease: EASE }}
-      className="relative w-44 sm:w-56 lg:w-72 shrink-0"
+      initial={{ opacity: 0, y: 28, rotate: 2 }}
+      animate={{ opacity: 1, y: 0, rotate: 0 }}
+      transition={{ delay: 0.55, duration: 0.9, ease: EASE }}
+      className="relative w-48 sm:w-60 lg:w-80 shrink-0"
+      style={{ perspective: 800 }}
     >
-      <div className="relative border border-line bg-panel">
-        {/* title bar */}
-        <div className="flex items-center justify-between px-3 py-1.5 border-b border-line text-2xs text-dim">
-          <span>$ open portrait.jpg</span>
-          <span className="text-accent" aria-hidden="true">●</span>
-        </div>
-        <div className="relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-accent/25 via-violet/20 to-transparent blur-2xl float-y"
+      />
+      <div className={reduced ? '' : 'float-y'}>
+        <motion.div
+          ref={ref}
+          onPointerMove={onMove}
+          onPointerLeave={() => setTilt({ rx: 0, ry: 0 })}
+          animate={{ rotateX: tilt.rx, rotateY: tilt.ry }}
+          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+          className="relative glass rounded-3xl p-3 shadow-glass-lg shine"
+        >
           <img
             src={`${import.meta.env.BASE_URL}${SITE.portrait}`}
             alt={`Portrait of ${SITE.name}`}
             onError={() => setOk(false)}
-            className="block w-full aspect-[4/5] object-cover grayscale contrast-110 hover:grayscale-0 transition-all duration-500"
+            className="block w-full aspect-[4/5] object-cover rounded-2xl"
           />
-          {/* green phosphor wash + scan tint */}
-          <div className="absolute inset-0 bg-accent/10 mix-blend-color pointer-events-none" aria-hidden="true" />
-        </div>
+        </motion.div>
       </div>
-      {/* corner brackets, echoing the cursor */}
-      <span className="absolute -top-2 -left-2 w-4 h-4 border-t-[1.5px] border-l-[1.5px] border-accent" aria-hidden="true" />
-      <span className="absolute -top-2 -right-2 w-4 h-4 border-t-[1.5px] border-r-[1.5px] border-accent" aria-hidden="true" />
-      <span className="absolute -bottom-2 -left-2 w-4 h-4 border-b-[1.5px] border-l-[1.5px] border-accent" aria-hidden="true" />
-      <span className="absolute -bottom-2 -right-2 w-4 h-4 border-b-[1.5px] border-r-[1.5px] border-accent" aria-hidden="true" />
     </motion.figure>
   )
 }
 
-export default function Hero({ booted }) {
+const enter = (delay) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { delay, duration: 0.75, ease: EASE },
+})
+
+export default function Hero() {
   const reduced = useReducedMotion()
   const { scrollY } = useScroll()
-  // parallax: canvas & content drift at different rates
-  const yContent = useTransform(scrollY, [0, 600], [0, reduced ? 0 : 120])
-  const yCanvas = useTransform(scrollY, [0, 600], [0, reduced ? 0 : 40])
+  const yContent = useTransform(scrollY, [0, 600], [0, reduced ? 0 : 110])
   const opacity = useTransform(scrollY, [0, 500], [1, 0])
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center grid-bg overflow-hidden">
-      <motion.div className="absolute inset-0" style={{ y: yCanvas }}>
-        <HeroCanvas />
-      </motion.div>
-      {/* vignette so type stays readable over the canvas */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--bg)_85%)]" aria-hidden="true" />
-
+    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
+      <Blobs />
       <motion.div
-        className="relative max-w-6xl mx-auto px-5 sm:px-8 w-full pt-24 pb-16"
+        className="relative max-w-6xl mx-auto px-5 sm:px-8 w-full pt-28 pb-16"
         style={{ y: yContent, opacity }}
       >
-        <div className="flex flex-col-reverse lg:flex-row lg:items-center gap-10 lg:gap-16">
+        <div className="flex flex-col-reverse lg:flex-row lg:items-center gap-12 lg:gap-20">
           <div className="min-w-0">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={booted ? { opacity: 1 } : {}}
-              transition={{ delay: 0.1, duration: 0.5 }}
-              className="text-2xs text-dim mb-5"
-            >
-              <span className="text-accent">●</span> session established — {SITE.location}
+            <motion.p {...enter(0.05)} className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-2xs font-semibold text-dim mb-7">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" aria-hidden="true" />
+              {SITE.location}
             </motion.p>
 
-            <h1 className="text-display font-extrabold text-bright uppercase" aria-label={SITE.name}>
-              <TypedName text={SITE.name} start={booted} />
-            </h1>
+            <AnimatedName />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={booted ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.9, duration: 0.7, ease: EASE }}
-              className="mt-7 max-w-2xl"
-            >
-              <p className="text-ink text-base sm:text-lg">
-                <span className="text-dim">$ whoami → </span>{SITE.role}
-              </p>
+            <motion.div {...enter(0.55)} className="mt-7 max-w-2xl">
+              <p className="text-lg sm:text-xl font-semibold text-ink">{SITE.role}</p>
               <p className="mt-3 text-dim leading-relaxed">{SITE.tagline}</p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={booted ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 1.15, duration: 0.7, ease: EASE }}
-              className="mt-9 flex flex-wrap gap-4"
-            >
+            <motion.div {...enter(0.7)} className="mt-10 flex flex-wrap gap-4">
               <Magnetic>
                 <a
                   href="#work"
                   data-hover
-                  className="inline-block border border-accent text-accent px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-bg transition-colors duration-300"
+                  className="shine inline-block rounded-full bg-accent text-white px-7 py-3.5 text-sm font-semibold shadow-glass hover:bg-bright transition-colors duration-300"
                 >
-                  view work →
+                  View work →
                 </a>
               </Magnetic>
               <Magnetic>
@@ -130,22 +177,22 @@ export default function Hero({ booted }) {
                   href={`${import.meta.env.BASE_URL}${SITE.resumeFile}`}
                   download
                   data-hover
-                  className="inline-block border border-line text-dim px-6 py-3 text-xs font-bold uppercase tracking-widest hover:border-ink hover:text-ink transition-colors duration-300"
+                  className="shine inline-block glass rounded-full px-7 py-3.5 text-sm font-semibold text-ink hover:text-accent transition-colors duration-300"
                 >
-                  resume.pdf ↓
+                  Download resume ↓
                 </a>
               </Magnetic>
             </motion.div>
           </div>
 
-          <Portrait booted={booted} />
+          <Portrait />
         </div>
       </motion.div>
 
       <motion.a
         href="#about"
         data-hover
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-2xs text-dim hover:text-accent"
+        className="absolute bottom-7 left-1/2 -translate-x-1/2 text-2xs font-semibold text-dim hover:text-accent"
         animate={reduced ? {} : { y: [0, 6, 0] }}
         transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
       >

@@ -1,7 +1,12 @@
 import { motion } from 'framer-motion'
-import { stagger, rise } from '../lib/motion'
+import { stagger, rise, EASE } from '../lib/motion'
 
-/** Section shell: `// NN — title` header, hairline rule, staggered reveal. */
+const ruleDraw = {
+  hidden: { scaleX: 0 },
+  show: { scaleX: 1, transition: { duration: 1.1, ease: EASE, delay: 0.2 } },
+}
+
+/** Section shell: numbered eyebrow, display heading, gradient rule, staggered reveal. */
 export default function Section({ id, index, title, children, className = '' }) {
   return (
     <section id={id} className={`py-section scroll-mt-16 ${className}`}>
@@ -12,14 +17,12 @@ export default function Section({ id, index, title, children, className = '' }) 
         whileInView="show"
         viewport={{ once: true, margin: '-80px' }}
       >
-        <motion.div variants={rise} className="mb-10">
-          <h2 className="text-h2 font-extrabold text-bright tracking-tight">
-            <span className="text-dim font-light select-none">{'// '}</span>
-            <span className="text-accent font-light">{index}</span>
-            <span className="text-dim font-light select-none"> — </span>
-            {title}
-          </h2>
-          <div className="rule-node mt-5" />
+        <motion.div variants={rise} className="mb-12">
+          <p className="text-2xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
+            {index}
+          </p>
+          <h2 className="font-display text-h2 font-bold text-bright">{title}</h2>
+          <motion.div variants={ruleDraw} className="rule-node mt-6 origin-left" />
         </motion.div>
         {children}
       </motion.div>

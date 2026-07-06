@@ -197,7 +197,7 @@ export const SKILLS = [
       { name: 'C++', icon: 'cplusplus' },
       { name: 'JavaScript', icon: 'javascript' },
       { name: 'TypeScript', icon: 'typescript' },
-      { name: 'Rust', icon: 'rust/EDF4FA' },
+      { name: 'Rust', icon: 'rust' },
       { name: 'R', icon: 'r' },
     ],
   },
@@ -206,7 +206,7 @@ export const SKILLS = [
     items: [
       { name: 'PyTorch', icon: 'pytorch' },
       { name: 'Hugging Face', icon: 'huggingface' },
-      { name: 'LangChain', icon: 'langchain/EDF4FA' },
+      { name: 'LangChain', icon: 'langchain' },
       { name: 'scikit-learn', icon: 'scikitlearn' },
       { name: 'XGBoost', icon: null },
       { name: 'LoRA / QLoRA', icon: null },
@@ -216,8 +216,8 @@ export const SKILLS = [
     category: 'data_engineering',
     items: [
       { name: 'PySpark', icon: 'apachespark' },
-      { name: 'Pandas', icon: 'pandas/EDF4FA' },
-      { name: 'Kafka', icon: 'apachekafka/EDF4FA' },
+      { name: 'Pandas', icon: 'pandas' },
+      { name: 'Kafka', icon: 'apachekafka' },
       { name: 'PostgreSQL', icon: 'postgresql' },
       { name: 'MySQL', icon: 'mysql' },
       { name: 'MongoDB', icon: 'mongodb' },
@@ -228,10 +228,11 @@ export const SKILLS = [
   {
     category: 'infra_and_tools',
     items: [
-      { name: 'AWS', icon: 'amazonwebservices/FF9900' },
+      // AWS was removed from Simple Icons (trademark) — served from Devicon instead
+      { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
       { name: 'Docker', icon: 'docker' },
       { name: 'FastAPI', icon: 'fastapi' },
-      { name: 'Flask', icon: 'flask/EDF4FA' },
+      { name: 'Flask', icon: 'flask' },
       { name: 'GitHub Actions', icon: 'githubactions' },
       { name: 'Git', icon: 'git' },
       { name: 'Linux', icon: 'linux' },
@@ -314,12 +315,12 @@ export const ACHIEVEMENTS = [
 
 // Nav sections — order defines the scroll rail
 export const SECTIONS = [
-  { id: 'hero', label: 'init' },
-  { id: 'about', label: 'about' },
-  { id: 'work', label: 'work' },
-  { id: 'experience', label: 'experience' },
-  { id: 'skills', label: 'skills' },
-  { id: 'leetcode', label: 'leetcode' },
-  { id: 'education', label: 'education' },
-  { id: 'contact', label: 'contact' },
+  { id: 'hero', label: 'Top' },
+  { id: 'about', label: 'About' },
+  { id: 'work', label: 'Work' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'leetcode', label: 'LeetCode' },
+  { id: 'education', label: 'Education' },
+  { id: 'contact', label: 'Contact' },
 ]

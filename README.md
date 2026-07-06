@@ -1,6 +1,6 @@
-# minh_bui — portfolio
+# Minh Le Bui — portfolio
 
-Terminal/systems-themed personal portfolio. React + Tailwind + Framer Motion.
+Arctic-glass personal portfolio. React + Tailwind + Framer Motion.
 
 ## Editing content
 
@@ -25,7 +25,8 @@ repo (e.g. to `m1nhbui.github.io`), change `base` in `vite.config.js` to `'/'`.
 
 ## Design system
 
-- One accent (`#54F196` phosphor green) + one rare secondary (`#E8B84B` amber). Tokens in `tailwind.config.js` and `src/index.css`.
-- Type: JetBrains Mono everywhere; scale defined in `tailwind.config.js`.
-- Signature moments: boot-sequence intro (skippable), bracket-frame custom cursor + magnetic buttons, particle-network hero canvas, scroll-drawn experience timeline, expand-to-detail project cards, grain + scanline texture.
-- Accessibility: semantic HTML, keyboard nav + focus rings, skip link, `prefers-reduced-motion` disables the boot intro, cursor, canvas animation, and parallax. Heavy effects auto-disable on touch devices.
+- Arctic glass: icy `#EDF3FA` base with aurora gradient washes, frosted-glass cards, cobalt accent (`#1272E8`) + violet gradient partner (`#7B5CF0`). Tokens in `tailwind.config.js` and `src/index.css`.
+- Type: Space Grotesk (display) + Inter (body).
+- Signature moments: site-wide snow drift (`src/components/Snow.jsx`), soft dot+ring custom cursor, magnetic buttons, scroll-drawn gradient timeline, tilt + expand-to-detail project cards.
+- LeetCode stats sync at build time via `scripts/fetch-leetcode.mjs` (daily cron in the deploy workflow).
+- Accessibility: semantic HTML, keyboard nav + focus rings, skip link, `prefers-reduced-motion` disables snow, cursor, and parallax. Heavy effects auto-disable on touch devices.

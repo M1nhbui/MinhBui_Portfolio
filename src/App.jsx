@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import BootSequence from './components/BootSequence'
 import CustomCursor from './components/CustomCursor'
+import Snow from './components/Snow'
 import Nav from './components/Nav'
 import ScrollRail from './components/ScrollRail'
 import Hero from './components/Hero'
@@ -15,7 +15,6 @@ import Footer from './components/Footer'
 import { SECTIONS } from './data/content'
 
 export default function App() {
-  const [booted, setBooted] = useState(false)
   const [activeSection, setActiveSection] = useState('hero')
 
   // observe sections to drive the nav + scroll rail
@@ -33,22 +32,22 @@ export default function App() {
       if (el) observer.observe(el)
     })
     return () => observer.disconnect()
-  }, [booted])
+  }, [])
 
   return (
-    <div className="grain scanlines">
+    <div className="grain">
       <a
         href="#about"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[110] focus:bg-accent focus:text-bg focus:px-4 focus:py-2 focus:text-xs"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[110] focus:bg-accent focus:text-white focus:px-4 focus:py-2 focus:text-xs focus:rounded-full"
       >
         Skip to content
       </a>
-      <BootSequence onDone={() => setBooted(true)} />
+      <Snow />
       <CustomCursor />
       <Nav activeSection={activeSection} />
       <ScrollRail activeSection={activeSection} />
       <main>
-        <Hero booted={booted} />
+        <Hero />
         <About />
         <Work />
         <Experience />

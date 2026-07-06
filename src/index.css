@@ -4,14 +4,14 @@
 
 /* ============ design tokens ============ */
 :root {
-  --bg: #0a0e12;
-  --panel: #0e141b;
-  --line: #1c2630;
-  --dim: #5a6b7a;
-  --ink: #c9d6e2;
-  --bright: #edf4fa;
-  --accent: #54f196;
-  --amber: #e8b84b;
+  --bg: #edf3fa;
+  --line: #d6e2ef;
+  --dim: #5b7189;
+  --ink: #233a52;
+  --bright: #0e2239;
+  --accent: #1272e8;
+  --violet: #7b5cf0;
+  --amber: #c98a04;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -21,20 +21,47 @@ html {
 }
 
 body {
-  @apply bg-bg text-ink font-mono antialiased;
-  font-size: 15px;
+  /* background intentionally lives on <html> so the fixed snow + aurora
+     layers (negative z-index) can render between it and the content */
+  @apply text-ink font-sans antialiased;
+  font-size: 15.5px;
   overflow-x: hidden;
+}
+
+/* aurora washes — soft blue/violet/cyan pools, slowly drifting */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -12%;
+  z-index: -20;
+  pointer-events: none;
+  background:
+    radial-gradient(640px circle at 12% 8%, rgba(118, 170, 255, 0.38), transparent 62%),
+    radial-gradient(720px circle at 88% 18%, rgba(165, 140, 255, 0.30), transparent 62%),
+    radial-gradient(820px circle at 50% 95%, rgba(105, 214, 236, 0.28), transparent 62%),
+    radial-gradient(500px circle at 70% 55%, rgba(255, 255, 255, 0.55), transparent 65%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  body::before {
+    animation: aurora 48s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+}
+@keyframes aurora {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-2.5%, 2%, 0) scale(1.07); }
+  100% { transform: translate3d(2.5%, -2%, 0) scale(1.03); }
 }
 
 ::selection {
   background: var(--accent);
-  color: var(--bg);
+  color: #fff;
 }
 
-/* keyboard focus — high-visibility terminal box */
 :focus-visible {
-  outline: 1.5px solid var(--accent);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
+  border-radius: 2px;
 }
 
 /* hide native cursor only when the custom one is active */
@@ -48,9 +75,25 @@ body.custom-cursor-active textarea {
   cursor: text;
 }
 
-/* ============ texture layers ============ */
+/* ============ glass surfaces ============ */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 32px rgba(24, 64, 128, 0.1);
+}
+.glass-strong {
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 48px rgba(24, 64, 128, 0.14);
+}
 
-/* film grain — SVG turbulence, barely-there */
+/* ============ texture ============ */
+
+/* whisper of grain so the gradients don't band */
 .grain::after {
   content: '';
   position: fixed;
@@ -59,65 +102,25 @@ body.custom-cursor-active textarea {
   height: 200%;
   pointer-events: none;
   z-index: 60;
-  opacity: 0.05;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain-shift 0.9s steps(4) infinite;
-}
-@keyframes grain-shift {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-2%, 1%); }
-  50% { transform: translate(1%, -2%); }
-  75% { transform: translate(-1%, -1%); }
-  100% { transform: translate(2%, 2%); }
 }
 
-/* faint CRT scanlines */
-.scanlines::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 59;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 3px,
-    rgba(0, 0, 0, 0.14) 3px,
-    rgba(0, 0, 0, 0.14) 4px
-  );
-}
-
-/* blueprint grid for section backgrounds */
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(84, 241, 150, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(84, 241, 150, 0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* ============ terminal bits ============ */
-
-.cursor-blink {
-  animation: blink 1.06s steps(1) infinite;
-}
-@keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-/* hairline rule with a node */
+/* gradient hairline with a node — section rules */
 .rule-node {
   position: relative;
   height: 1px;
-  background: var(--line);
+  background: linear-gradient(90deg, var(--accent), var(--violet) 40%, transparent 90%);
+  opacity: 0.5;
 }
 .rule-node::before {
   content: '';
   position: absolute;
   left: 0;
-  top: -2px;
-  width: 5px;
-  height: 5px;
+  top: -2.5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
   background: var(--accent);
 }
 
@@ -132,7 +135,7 @@ body.custom-cursor-active textarea {
   left: 0;
   bottom: -2px;
   width: 100%;
-  height: 1px;
+  height: 1.5px;
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: right;
@@ -144,11 +147,63 @@ body.custom-cursor-active textarea {
   transform-origin: left;
 }
 
-/* ============ reduced motion / mobile ============ */
+/* gradient text for display moments — shimmers slowly */
+.text-gradient {
+  background: linear-gradient(100deg, var(--accent), var(--violet), var(--accent));
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s ease-in-out infinite alternate;
+}
+@keyframes shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+
+/* glare sweep across glass cards & buttons on hover */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+.shine:hover::before {
+  left: 130%;
+  transition: left 0.7s var(--ease-out);
+}
+
+/* heatmap cell cascade */
+.hm-cell {
+  opacity: 0;
+  animation: hm-in 0.45s var(--ease-out) forwards;
+}
+@keyframes hm-in {
+  from { opacity: 0; transform: scale(0.3); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* gentle idle float (portrait, blobs) */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.float-y {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+/* ============ reduced motion ============ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .grain::after { animation: none; }
-  .cursor-blink { animation: none; opacity: 1; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;

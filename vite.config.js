@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// If you rename the repo (e.g. to m1nhbui.github.io), change `base` to '/'
+// Serving at the custom domain root (minhlebui.com).
+// If you ever go back to <user>.github.io/MinhBui_Portfolio, set base to '/MinhBui_Portfolio/'.
 export default defineConfig({
-  base: '/MinhBui_Portfolio/',
+  base: '/',
   plugins: [react()],
 })

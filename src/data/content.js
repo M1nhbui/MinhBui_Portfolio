@@ -152,6 +152,7 @@ export const EXPERIENCE = [
       'Designed a confidence-, document-type- and signature-aware data-curation pipeline that beat the 80K-image baseline with 3.4× fewer images (23.5K); adopted as the DLA training baseline.',
       'Built a LayoutReader–XGBoost reading-order labeler: exact match 51.3% → 78.9%, successor F1 81.7% → 92.3% over rule-based labeling.',
       'Built a failure taxonomy from 2,000+ PaddleOCR-VL outputs, separating recognition errors from post-processing defects to guide data collection.',
+      'Validated a 3,000-image table dataset for fine-tuning PaddleOCR-VL 1.6, catching 30% mislabeled samples and systematic annotation errors before training.',
     ],
   },
   {
@@ -165,6 +166,7 @@ export const EXPERIENCE = [
       'Fine-tuned Llama-3.2-3B (LoRA/QLoRA/full) to study hallucination: ~3× cut in cross-paraphrase answer variance (49%→17%), 100% consistency on held-out facts; LoRA/QLoRA matched full fine-tuning.',
       'Compared Llama and Mistral on 520 AdvBench prompts, identifying an 18.3% refusal gap with refined response classification.',
       'Developing Pair-H, an iterative adversarial question-rewriting pipeline with an evidence-grounded judge to induce and detect unsupported LLM claims.',
+      'Compiled 40+ hallucination & red-teaming benchmarks supporting evaluation of 6 in-house models.',
     ],
   },
   {

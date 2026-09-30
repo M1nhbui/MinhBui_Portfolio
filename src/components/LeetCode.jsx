@@ -130,6 +130,18 @@ function Heatmap({ calendar }) {
   )
 }
 
+/* Footer label for the heatmap: sync date, or a note when showing placeholder data. */
+function syncLabel(stats) {
+  if (!stats.calendar) return 'sample activity · live sync unavailable'
+  if (!stats.updatedAt) return 'synced from LeetCode'
+  const syncedDate = new Date(stats.updatedAt).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+  return `synced ${syncedDate}`
+}
+
 export default function LeetCode() {
   const [stats, setStats] = useState(LEETCODE)
 
@@ -146,6 +158,7 @@ export default function LeetCode() {
           solved: d.solved,
           pastYear: d.pastYear ?? s.pastYear,
           calendar: d.calendar ?? null,
+          updatedAt: d.updatedAt ?? null,
         }))
       })
       .catch(() => {})
@@ -226,12 +239,16 @@ export default function LeetCode() {
             </p>
           </div>
           <Heatmap calendar={stats.calendar} />
-          <div className="mt-4 flex items-center justify-end gap-1.5 text-2xs text-dim">
-            less
-            {ALPHA.slice(1).map((a) => (
-              <span key={a} className="w-[9px] h-[9px] rounded-[2px]" style={{ background: `rgba(18, 114, 232, ${a})` }} />
-            ))}
-            more
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-2xs text-dim">
+            {/* Shows when the stats were last pulled, so a stale chart is obvious */}
+            <span>{syncLabel(stats)}</span>
+            <span className="flex items-center gap-1.5">
+              less
+              {ALPHA.slice(1).map((a) => (
+                <span key={a} className="w-[9px] h-[9px] rounded-[2px]" style={{ background: `rgba(18, 114, 232, ${a})` }} />
+              ))}
+              more
+            </span>
           </div>
         </motion.div>
       </div>

@@ -9,7 +9,7 @@ on:
     - cron: '0 6 * * *'
 
 permissions:
-  contents: read
+  contents: write # lets the daily run commit refreshed leetcode.json
   pages: write
   id-token: write
 
@@ -28,7 +28,27 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Sync LeetCode stats
-        run: node scripts/fetch-leetcode.mjs || echo "LeetCode fetch failed — using committed fallback"
+        id: leetcode
+        run: |
+          if node scripts/fetch-leetcode.mjs; then
+            echo "synced=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::LeetCode fetch failed, using committed fallback"
+          fi
+      # Commit fresh stats on scheduled/manual runs: keeps the fallback current
+      # and counts as repo activity, so the schedule is never auto-disabled.
+      - name: Commit refreshed LeetCode stats
+        if: steps.leetcode.outputs.synced == 'true' && github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/leetcode.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: refresh LeetCode stats [skip ci]"
+            git pull --rebase origin main && git push origin HEAD:main
+          fi
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:

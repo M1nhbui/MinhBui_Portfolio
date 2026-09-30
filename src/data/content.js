@@ -22,7 +22,7 @@ export const SITE = {
 
 export const ABOUT = {
   paragraphs: [
-    `I'm a Computer Science & Data Science student at UW–Madison (Class of 2028), currently located in Madison, WI. My work sits where machine learning meets infrastructure: fine-tuning LLMs to study hallucination at Dartmouth, shipping churn models on 2M+ user records at VNPT-Media, and validating OCR training data at CMC OpenAI.`,
+    `I'm a Computer Science & Data Science student at UW–Madison (Class of 2028), currently located in Madison, WI. My work sits where machine learning meets infrastructure: fine-tuning LLMs to study hallucination at Dartmouth, shipping churn models on 2M+ user records at VNPT-Media, and fine-tuning document-layout models for Vietnamese legal documents at CMC AI.`,
     `I care about the unglamorous parts that make models actually work — data quality, evaluation, pipelines that don't fall over. Outside of that, I compete in ICPC and serve as Vice President of the Vietnamese International Student Association.`,
   ],
   // "live" tech stack rendered as a status board in About
@@ -35,7 +35,7 @@ export const ABOUT = {
     { name: 'LangChain', status: 'active' },
     { name: 'FastAPI', status: 'active' },
     { name: 'Docker', status: 'active' },
-    { name: 'AWS', status: 'active' },
+    { name: 'AWS / Terraform', status: 'active' },
     { name: 'Java / C++', status: 'loaded' },
     { name: 'XGBoost / LightGBM', status: 'loaded' },
     { name: 'GitHub Actions', status: 'loaded' },
@@ -45,8 +45,26 @@ export const ABOUT = {
 // Selected Work — showcase cards (expand on click)
 export const PROJECTS = [
   {
-    id: 'ghostmarket',
+    id: 'crypto-anomaly',
     index: '01',
+    title: 'Crypto Market Anomaly Pipeline',
+    kind: 'cloud data engineering · in progress',
+    role: 'Solo — architecture, pipeline, infra',
+    summary:
+      'Serverless medallion pipeline on AWS that turns a live crypto feed into two SQL-queryable tables: clean minute bars and a ranked table of unusual price and volume moves.',
+    details: [
+      'S3, Lambda, Glue/PySpark and Athena, fully provisioned with Terraform; Lambda ingests 1-minute bars for 17 pairs every 5 minutes.',
+      'Dedup on (symbol, open_time) plus time-based Spark windows: zero duplicates, zero OHLC violations and zero gaps across 16 days.',
+      'Anomaly layer uses per-symbol rolling z-scores (60-bar window, log1p volume, variance guard), flagging 1.33% of scored bars; each event carries its baseline and detection parameters for reproducibility.',
+      'In progress: an Athena-backed quality gate (8 checks, two severities) that blocks bad data from the analytics layer, plus Step Functions orchestration, backed by 55 mutation-verified PySpark tests.',
+    ],
+    tech: ['AWS', 'Terraform', 'PySpark', 'Glue', 'Athena', 'SQL'],
+    links: [],
+    metric: '17 pairs · 5-min ingestion · 0 gaps over 16 days',
+  },
+  {
+    id: 'ghostmarket',
+    index: '02',
     title: 'GhostMarket — Vibe & Price Decoupling Engine',
     kind: 'real-time data engineering',
     role: 'Solo — architecture, pipeline, dashboard',
@@ -64,7 +82,7 @@ export const PROJECTS = [
   },
   {
     id: 'devkit',
-    index: '02',
+    index: '03',
     title: 'DevKit — Local-First Developer Toolbox',
     kind: 'desktop systems software',
     role: 'Solo — Rust backend, TS frontend',
@@ -82,7 +100,7 @@ export const PROJECTS = [
   },
   {
     id: 'news-sentiment',
-    index: '03',
+    index: '04',
     title: 'Daily News Sentiment Dashboard',
     kind: 'ML pipeline · live in production',
     role: 'Solo — model, ETL, infra, dashboard',
@@ -103,7 +121,7 @@ export const PROJECTS = [
   },
   {
     id: 'urbanpulse',
-    index: '04',
+    index: '05',
     title: 'UrbanPulse — City Activity Heatmap',
     kind: 'hackathon · CheeseHacks (team banhmi)',
     role: 'Data pipeline & scoring engine',
@@ -124,37 +142,39 @@ export const PROJECTS = [
 // Experience timeline (most recent first)
 export const EXPERIENCE = [
   {
-    org: 'CMC OpenAI',
+    org: 'CMC AI',
     role: 'AI Intern',
-    stack: 'Transformers · OCR',
-    period: 'Jun 2026 — Present',
+    stack: 'Transformers · PaddleOCR-VL 1.6 · PP-DocLayoutV3 · XGBoost',
+    period: 'Jun 2026 — Aug 2026',
     location: 'Hanoi, Vietnam',
-    current: true,
     points: [
-      'Validated a 3,000-image table dataset for fine-tuning PaddleOCR-VL 1.6 — caught 30% mislabeled samples and systematic annotation errors before training.',
-      'Analyzed 2,000 PaddleOCR-VL outputs on Vietnamese legislation documents, filtering to high-value images that shrank training size while improving stability.',
+      'Fine-tuned PP-DocLayoutV3 (RT-DETR) for legal-document layout detection: COCO mAP 0.419 → 0.497 (+18.6%), 8/11 classes improved, plus a new signature class at 0.38 AP.',
+      'Designed a confidence-, document-type- and signature-aware data-curation pipeline that beat the 80K-image baseline with 3.4× fewer images (23.5K); adopted as the DLA training baseline.',
+      'Built a LayoutReader–XGBoost reading-order labeler: exact match 51.3% → 78.9%, successor F1 81.7% → 92.3% over rule-based labeling.',
+      'Built a failure taxonomy from 2,000+ PaddleOCR-VL outputs, separating recognition errors from post-processing defects to guide data collection.',
     ],
   },
   {
     org: 'Thayer School of Engineering, Dartmouth',
     role: 'Research Assistant',
-    stack: 'Llama-3.2-3B · LLM Fine-Tuning · LangChain',
+    stack: 'Llama-3.2-3B · LLM Fine-Tuning · Benchmarking · LangChain',
     period: 'Sep 2025 — Present',
     location: 'Remote',
     current: true,
     points: [
-      'Fine-tuned Llama-3.2-3B (LoRA/QLoRA/full) to study hallucination — ~3× variance cut (49%→17%), 100% consistency on held-out facts.',
-      'Compiled 40+ hallucination & red-teaming benchmarks supporting evaluation of 6 in-house models.',
+      'Fine-tuned Llama-3.2-3B (LoRA/QLoRA/full) to study hallucination: ~3× cut in cross-paraphrase answer variance (49%→17%), 100% consistency on held-out facts; LoRA/QLoRA matched full fine-tuning.',
+      'Compared Llama and Mistral on 520 AdvBench prompts, identifying an 18.3% refusal gap with refined response classification.',
+      'Developing Pair-H, an iterative adversarial question-rewriting pipeline with an evidence-grounded judge to induce and detect unsupported LLM claims.',
     ],
   },
   {
     org: 'VNPT-Media',
     role: 'ML Engineer Intern',
     stack: 'XGBoost · Docker · FastAPI · PySpark',
-    period: 'Jul 2025 — Sep 2025',
+    period: 'Jun 2025 — Aug 2025',
     location: 'Hanoi, Vietnam',
     points: [
-      'Optimized a PySpark feature pipeline over 2M+ monthly user records for stable monthly retraining.',
+      'Built a PySpark feature pipeline over 2M+ monthly user records for stable monthly retraining.',
       'Shipped an XGBoost return-prediction model (F1 0.82, +14% over baseline) via Docker + FastAPI.',
       'Bayesian tuning +5% performance; SHAP explanations for non-technical stakeholders.',
     ],
@@ -209,6 +229,7 @@ export const SKILLS = [
       { name: 'LangChain', icon: 'langchain' },
       { name: 'scikit-learn', icon: 'scikitlearn' },
       { name: 'XGBoost', icon: null },
+      { name: 'LightGBM', icon: null },
       { name: 'LoRA / QLoRA', icon: null },
     ],
   },
@@ -230,6 +251,7 @@ export const SKILLS = [
     items: [
       // AWS was removed from Simple Icons (trademark) — served from Devicon instead
       { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
+      { name: 'Terraform', icon: 'terraform' },
       { name: 'Docker', icon: 'docker' },
       { name: 'FastAPI', icon: 'fastapi' },
       { name: 'Flask', icon: 'flask' },

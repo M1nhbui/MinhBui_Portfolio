@@ -1,6 +1,6 @@
 import { SECTIONS } from '../data/content'
 
-/** Fixed left rail — dot-per-section indicator that tracks scroll position. */
+/** Fixed left rail: dot-per-section indicator that tracks scroll position. */
 export default function ScrollRail({ activeSection }) {
   return (
     <aside

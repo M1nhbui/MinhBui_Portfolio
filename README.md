@@ -1,10 +1,10 @@
-# Minh Le Bui — portfolio
+# Minh Le Bui: portfolio
 
 Arctic-glass personal portfolio. React + Tailwind + Framer Motion.
 
 ## Editing content
 
-Everything — name, roles, projects, skills, education, achievements, socials — lives in
+Everything (name, roles, projects, skills, education, achievements, socials) lives in
 **`src/data/content.js`**. Edit that one file; every section reads from it.
 The resume served by the download buttons is **`public/MinhLeBui_Resume.pdf`** (replace to update).
 

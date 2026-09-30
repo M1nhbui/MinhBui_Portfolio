@@ -1,6 +1,6 @@
 // ============================================================
 //  ALL SITE CONTENT LIVES HERE.
-//  Edit these objects — every section reads from this file.
+//  Edit these objects; every section reads from this file.
 // ============================================================
 
 export const SITE = {
@@ -12,7 +12,7 @@ export const SITE = {
   email: 'minhbuics@gmail.com',
   phone: '+1 (608) 598-8955',
   resumeFile: 'MinhLeBui_Resume.pdf', // lives in /public
-  portrait: 'portrait.jpg', // lives in /public — drop your photo there (square-ish crop works best)
+  portrait: 'portrait.jpg', // lives in /public; drop your photo there (square-ish crop works best)
   socials: [
     { label: 'github', url: 'https://github.com/M1nhbui' },
     { label: 'linkedin', url: 'https://linkedin.com/in/minhlebui' },
@@ -23,7 +23,7 @@ export const SITE = {
 export const ABOUT = {
   paragraphs: [
     `I'm a Computer Science & Data Science student at UW–Madison (Class of 2028), currently located in Madison, WI. My work sits where machine learning meets infrastructure: fine-tuning LLMs to study hallucination at Dartmouth, shipping churn models on 2M+ user records at VNPT-Media, and fine-tuning document-layout models for Vietnamese legal documents at CMC AI.`,
-    `I care about the unglamorous parts that make models actually work — data quality, evaluation, pipelines that don't fall over. Outside of that, I compete in ICPC and serve as Vice President of the Vietnamese International Student Association.`,
+    `I care about the unglamorous parts that make models actually work: data quality, evaluation, pipelines that don't fall over. Outside of that, I compete in ICPC and serve as Vice President of the Vietnamese International Student Association.`,
   ],
   // "live" tech stack rendered as a status board in About
   stack: [
@@ -42,14 +42,14 @@ export const ABOUT = {
   ],
 }
 
-// Selected Work — showcase cards (expand on click)
+// Selected Work: showcase cards (expand on click)
 export const PROJECTS = [
   {
     id: 'crypto-anomaly',
     index: '01',
     title: 'Crypto Market Anomaly Pipeline',
     kind: 'cloud data engineering · in progress',
-    role: 'Solo — architecture, pipeline, infra',
+    role: 'Solo: architecture, pipeline, infra',
     summary:
       'Serverless medallion pipeline on AWS that turns a live crypto feed into two SQL-queryable tables: clean minute bars and a ranked table of unusual price and volume moves.',
     details: [
@@ -65,11 +65,11 @@ export const PROJECTS = [
   {
     id: 'ghostmarket',
     index: '02',
-    title: 'GhostMarket — Vibe & Price Decoupling Engine',
+    title: 'GhostMarket: Vibe & Price Decoupling Engine',
     kind: 'real-time data engineering',
-    role: 'Solo — architecture, pipeline, dashboard',
+    role: 'Solo: architecture, pipeline, dashboard',
     summary:
-      'Streaming pipeline that detects moments when social sentiment diverges from live crypto prices — a leading indicator for hype pumps and panic crashes.',
+      'Streaming pipeline that detects moments when social sentiment diverges from live crypto prices, a leading indicator for hype pumps and panic crashes.',
     details: [
       'Async producers poll CoinGecko every 5s and stream live Telegram mentions into partitioned Aiven Kafka topics.',
       'Stream processor scores every message with FinBERT into a continuous “vibe score”, maintained in an O(1) sliding 5-minute window.',
@@ -83,16 +83,16 @@ export const PROJECTS = [
   {
     id: 'devkit',
     index: '03',
-    title: 'DevKit — Local-First Developer Toolbox',
+    title: 'DevKit: Local-First Developer Toolbox',
     kind: 'desktop systems software',
-    role: 'Solo — Rust backend, TS frontend',
+    role: 'Solo: Rust backend, TS frontend',
     summary:
-      'Native desktop toolbox (Tauri 2 + Rust) with 25+ offline tools behind one plugin-style trait contract — the frontend never changes when a tool is added.',
+      'Native desktop toolbox (Tauri 2 + Rust) with 25+ offline tools behind one plugin-style trait contract, so the frontend never changes when a tool is added.',
     details: [
       'Every tool implements a shared Rust `Tool` trait; a registry exposes list/run so the TypeScript frontend stays fully generic.',
       'Grouped sidebar and Cmd/Ctrl+K command palette generated from backend metadata; progress events stream to the UI via a ProgressSink.',
       'Tools span encoding (Base64, UUID/ULID, SHA-256), formatting (JSON, cron, regex, diff), files (streaming hashers, PDF split/merge, EXIF strip, bulk rename with dry-run), and network (HTTP tester, DNS/WHOIS).',
-      'Local-first by design — everything runs offline except explicitly-invoked network tools. Release build verified.',
+      'Local-first by design: everything runs offline except explicitly-invoked network tools. Release build verified.',
     ],
     tech: ['Tauri 2', 'Rust', 'TypeScript', 'Vite'],
     links: [{ label: 'github', url: 'https://github.com/M1nhbui/Devkit_test' }],
@@ -103,12 +103,12 @@ export const PROJECTS = [
     index: '04',
     title: 'Daily News Sentiment Dashboard',
     kind: 'ML pipeline · live in production',
-    role: 'Solo — model, ETL, infra, dashboard',
+    role: 'Solo: model, ETL, infra, dashboard',
     summary:
       'Fully automated pipeline: fetches political news daily, scores sentiment with a custom-trained classifier, stores in Amazon RDS, visualizes live on Streamlit.',
     details: [
       'Custom Voting Classifier (LogReg / SVM / Random Forest) trained on 30K+ TF-IDF samples; model hosted on AWS S3 and loaded dynamically at runtime.',
-      'GitHub Actions triggers the full ETL daily at 6AM UTC — fetch → clean → predict → store — with encrypted secrets throughout.',
+      'GitHub Actions triggers the full ETL (fetch → clean → predict → store) daily at 6AM UTC, with encrypted secrets throughout.',
       'PostgreSQL on Amazon RDS via SQLAlchemy ORM; fully Dockerized for reproducible builds.',
       'Live Streamlit dashboard with auto-refreshing Altair charts, deployed on Streamlit Cloud.',
     ],
@@ -122,7 +122,7 @@ export const PROJECTS = [
   {
     id: 'urbanpulse',
     index: '05',
-    title: 'UrbanPulse — City Activity Heatmap',
+    title: 'UrbanPulse: City Activity Heatmap',
     kind: 'hackathon · CheeseHacks (team banhmi)',
     role: 'Data pipeline & scoring engine',
     summary:
@@ -145,7 +145,7 @@ export const EXPERIENCE = [
     org: 'CMC AI',
     role: 'AI Intern',
     stack: 'Transformers · PaddleOCR-VL 1.6 · PP-DocLayoutV3 · XGBoost',
-    period: 'Jun 2026 — Aug 2026',
+    period: 'Jun 2026 – Aug 2026',
     location: 'Hanoi, Vietnam',
     points: [
       'Fine-tuned PP-DocLayoutV3 (RT-DETR) for legal-document layout detection: COCO mAP 0.419 → 0.497 (+18.6%), 8/11 classes improved, plus a new signature class at 0.38 AP.',
@@ -159,7 +159,7 @@ export const EXPERIENCE = [
     org: 'Thayer School of Engineering, Dartmouth',
     role: 'Research Assistant',
     stack: 'Llama-3.2-3B · LLM Fine-Tuning · Benchmarking · LangChain',
-    period: 'Sep 2025 — Present',
+    period: 'Sep 2025 – Present',
     location: 'Remote',
     current: true,
     points: [
@@ -173,7 +173,7 @@ export const EXPERIENCE = [
     org: 'VNPT-Media',
     role: 'ML Engineer Intern',
     stack: 'XGBoost · Docker · FastAPI · PySpark',
-    period: 'Jun 2025 — Aug 2025',
+    period: 'Jun 2025 – Aug 2025',
     location: 'Hanoi, Vietnam',
     points: [
       'Built a PySpark feature pipeline over 2M+ monthly user records for stable monthly retraining.',
@@ -182,30 +182,30 @@ export const EXPERIENCE = [
     ],
   },
   {
-    org: 'AI Research Center — HUST',
+    org: 'AI Research Center, HUST',
     role: 'Research Intern',
     stack: 'RAG · FAISS · PyTorch · VLMs · CLIP',
-    period: 'May 2025 — Jul 2025',
+    period: 'May 2025 – Jul 2025',
     location: 'Hanoi, Vietnam',
     points: [
-      'Prototyped a RAG pipeline for PET/CT medical scans — the retrieval framework for future VLM testing.',
+      'Prototyped a RAG pipeline for PET/CT medical scans, serving as the retrieval framework for future VLM testing.',
     ],
   },
   {
     org: 'Biokind Analytics',
     role: 'Data Engineer & Analyst',
     stack: 'Pandas · GeoPandas · Tableau',
-    period: 'Sep 2024 — May 2025',
+    period: 'Sep 2024 – May 2025',
     location: 'Madison, WI',
     points: [
-      'Automated collection & cleaning for 15+ counties via FIPS codes — 40% less manual processing.',
+      'Automated collection & cleaning for 15+ counties via FIPS codes, cutting manual processing by 40%.',
       'Analyzed 12GB+ of historical data (6 years), directly informing a partner bank’s donation strategy.',
       'Built interactive Tableau + GeoPandas dashboards for campaign planning.',
     ],
   },
 ]
 
-// Skills, categorized — rendered as logo tiles.
+// Skills, categorized and rendered as logo tiles.
 // `icon` is a Simple Icons slug (see simpleicons.org); append '/HEXCOLOR' to
 // override dark brand colors that vanish on the dark background.
 // Set icon: null to render a terminal-style fallback glyph instead.
@@ -251,7 +251,7 @@ export const SKILLS = [
   {
     category: 'infra_and_tools',
     items: [
-      // AWS was removed from Simple Icons (trademark) — served from Devicon instead
+      // AWS was removed from Simple Icons (trademark), so it is served from Devicon instead
       { name: 'AWS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
       { name: 'Terraform', icon: 'terraform' },
       { name: 'Docker', icon: 'docker' },
@@ -267,7 +267,7 @@ export const SKILLS = [
   },
 ]
 
-// LeetCode / problem-solving stats — LAST-RESORT fallback only.
+// LeetCode / problem-solving stats: LAST-RESORT fallback only.
 // The real numbers live in public/leetcode.json, refreshed automatically by
 // scripts/fetch-leetcode.mjs on every deploy (daily cron in deploy.yml).
 export const LEETCODE = {
@@ -294,7 +294,7 @@ export const LEETCODE = {
 }
 
 export const EDUCATION = {
-  school: 'University of Wisconsin — Madison',
+  school: 'University of Wisconsin–Madison',
   degree: 'B.S. Computer Science & Data Science',
   certificate: 'Certificate in Economic Analytics',
   gpa: '4.0 / 4.0',
@@ -322,7 +322,7 @@ export const ACHIEVEMENTS = [
   },
   {
     title: 'Vietnam Science & Engineering Fair (ViSEF)',
-    detail: '4th prize — System Software',
+    detail: '4th prize, System Software',
     tag: 'research',
   },
   {
@@ -337,7 +337,7 @@ export const ACHIEVEMENTS = [
   },
 ]
 
-// Nav sections — order defines the scroll rail
+// Nav sections: order defines the scroll rail
 export const SECTIONS = [
   { id: 'hero', label: 'Top' },
   { id: 'about', label: 'About' },

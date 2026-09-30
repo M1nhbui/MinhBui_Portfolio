@@ -12,11 +12,11 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
-  // No backend needed — composes a mail draft to SITE.email
+  // No backend needed: composes a mail draft to SITE.email
   const submit = (e) => {
     e.preventDefault()
     const subject = encodeURIComponent(`[portfolio] message from ${form.name || 'visitor'}`)
-    const body = encodeURIComponent(`${form.message}\n\n— ${form.name}\n${form.email}`)
+    const body = encodeURIComponent(`${form.message}\n\n${form.name}\n${form.email}`)
     window.location.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`
   }
 

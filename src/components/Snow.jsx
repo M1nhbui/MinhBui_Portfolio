@@ -42,7 +42,7 @@ export default function Snow() {
       ey: 0,
     }))
 
-    // cursor state — position + velocity (for gusts) + click bursts
+    // cursor state: position + velocity (for gusts) + click bursts
     const mouse = { x: -9999, y: -9999, vx: 0, vy: 0 }
     const onMove = (e) => {
       mouse.vx = e.clientX - mouse.x

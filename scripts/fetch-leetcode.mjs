@@ -75,4 +75,4 @@ const out = {
 }
 
 writeFileSync(new URL('../public/leetcode.json', import.meta.url), JSON.stringify(out))
-console.log(`✓ leetcode.json updated — ${out.solved.easy.done + out.solved.medium.done + out.solved.hard.done} solved, ${submissions} submissions past year`)
+console.log(`✓ leetcode.json updated: ${out.solved.easy.done + out.solved.medium.done + out.solved.hard.done} solved, ${submissions} submissions past year`)

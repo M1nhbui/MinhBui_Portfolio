@@ -81,7 +81,7 @@ const lvl = (n) => (n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 9 ? 3 : 4)
 const ALPHA = [0, 0.25, 0.45, 0.7, 1]
 
 /**
- * Activity heatmap — cells cascade in when scrolled into view.
+ * Activity heatmap: cells cascade in when scrolled into view.
  * Real calendar data ({epochSeconds: count}) when available, else illustrative.
  */
 function Heatmap({ calendar }) {
